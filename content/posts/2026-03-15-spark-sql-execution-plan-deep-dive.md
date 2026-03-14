@@ -2,10 +2,11 @@
 title: "Spark SQL执行计划深度解析：从入门到调优"
 date: 2026-03-15T10:00:00+08:00
 draft: false
+author: "卡尔"
 description: "深入解析Spark SQL执行计划的各个层级，掌握Catalyst优化器的核心原理，学会通过执行计划定位和解决性能问题。"
 tags: ["Spark", "SQL", "性能优化", "执行计划", "Catalyst", "大数据"]
 categories: ["技术深度", "Spark优化"]
-series: ["Spark优化实战"]
+summary: "Spark SQL执行计划的深度解析与性能调优实战"
 keywords: ["Spark SQL", "执行计划", "Catalyst优化器", "性能调优", "大数据", "查询优化"]
 ---
 
