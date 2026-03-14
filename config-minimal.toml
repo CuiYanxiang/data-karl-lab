@@ -1,0 +1,22 @@
+baseURL = "https://cuiyanxiang.github.io/data-karl-lab/"
+languageCode = "zh-cn"
+title = "数据卡尔实验室"
+theme = "ananke"
+
+[author]
+  name = "卡尔"
+  email = "karl@karl-tech.com"
+
+[params]
+  description = "大数据专家卡尔的技术博客"
+  
+[menu]
+  [[menu.main]]
+    identifier = "posts"
+    name = "文章"
+    url = "/posts/"
+    
+  [[menu.main]]
+    identifier = "about"
+    name = "关于"
+    url = "/about/"
