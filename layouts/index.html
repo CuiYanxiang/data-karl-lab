@@ -1,0 +1,17 @@
+{{ define "main" }}
+    <section class="home">
+        <h2>欢迎来到数据卡尔实验室</h2>
+        <p>我是卡尔，一名大数据架构师和技术创业者。这里分享我在Spark优化、金融数据分析、技术创业等方面的实战经验。</p>
+        
+        <h3>最新文章</h3>
+        <ul class="post-list">
+            {{ range first 5 (where .Site.RegularPages "Type" "posts") }}
+            <li class="post-item">
+                <h4><a href="{{ .RelPermalink }}">{{ .Title }}</a></h4>
+                <p>{{ .Description }}</p>
+                <small>{{ .Date.Format "2006年1月2日" }}</small>
+            </li>
+            {{ end }}
+        </ul>
+    </section>
+{{ end }}

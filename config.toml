@@ -1,22 +1,37 @@
 baseURL = "https://cuiyanxiang.github.io/data-karl-lab/"
 languageCode = "zh-cn"
-title = "数据卡尔实验室"
-theme = "ananke"
+title = "数据卡尔实验室 - 卡尔的技术博客"
+theme = ""  # 不使用任何主题
 
+# 作者信息
 [author]
   name = "卡尔"
+  email = "karl@karl-tech.com"
+  bio = "大数据架构师 | 技术创业者"
 
-[params]
-  description = "大数据专家的技术博客"
+# 输出配置
+[outputs]
+  home = ["HTML"]
+  
+# 构建配置
+[build]
+  writeStats = false
 
-[[menu.main]]
-  identifier = "posts"
-  name = "文章"
-  url = "/posts/"
-  weight = 1
+# 菜单配置（简单版本）
+[menu]
+  [[menu.main]]
+    identifier = "posts"
+    name = "文章"
+    url = "/posts/"
+    weight = 1
+    
+  [[menu.main]]
+    identifier = "about"
+    name = "关于"
+    url = "/about/"
+    weight = 2
 
-[[menu.main]]
-  identifier = "about"
-  name = "关于"
-  url = "/about/"
-  weight = 2
+# 分类和标签配置
+[taxonomies]
+  tag = "tags"
+  category = "categories"
