@@ -29,7 +29,9 @@ jobs:
           rm -rf ~/.cache/hugo 2>/dev/null || true
           rm -rf themes 2>/dev/null || true
           rm -f go.sum 2>/dev/null || true
-          echo "✅ 已清除所有Hugo缓存"
+          # 特别清除ananke主题残留
+          find . -name "*ananke*" -type d -exec rm -rf {} \; 2>/dev/null || true
+          echo "✅ 已清除所有Hugo缓存和ananke残留"
 
       - name: Setup Hugo (latest extended)
         uses: peaceiris/actions-hugo@v3
@@ -60,6 +62,11 @@ jobs:
           
           echo "=== 检查主题 ==="
           ls -la themes/ 2>/dev/null || echo "themes目录不存在"
+          echo "强制确保使用PaperMod主题..."
+          # 删除任何ananke主题文件
+          find themes/ -name "*ananke*" -exec rm -rf {} \; 2>/dev/null || true
+          # 确保config.toml使用PaperMod
+          sed -i 's/theme = ".*"/theme = "PaperMod"/' config.toml
           
           echo "=== 检查配置 ==="
           grep -n "theme" config.toml
