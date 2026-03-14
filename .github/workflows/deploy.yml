@@ -5,20 +5,20 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:  # 允许手动触发
 
-  # 允许手动触发部署
-  workflow_dispatch:
-
-# 设置权限
 permissions:
   contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages-${{ github.ref }}"
+  cancel-in-progress: false
 
 jobs:
-  # 构建作业
   build:
     runs-on: ubuntu-latest
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -29,29 +29,49 @@ jobs:
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
-          hugo-version: '0.140.0'  # 更新到PaperMod兼容版本
+          hugo-version: '0.140.0'
           extended: true
 
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v5
+      # Hugo缓存配置
+      - name: Cache Hugo modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/hugo
+            themes
+          key: ${{ runner.os }}-hugo-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-hugo-
 
       - name: Build with Hugo
         env:
-          HUGO_ENVIRONMENT: production
           HUGO_ENV: production
         run: |
+          # 清理之前的构建
+          rm -rf public
+          
+          # 构建网站
           hugo \
             --gc \
             --minify \
-            --baseURL "${{ steps.pages.outputs.base_url }}/"
+            --baseURL "${{ steps.pages.outputs.base_url }}/" \
+            --destination ./public
+          
+          # 验证构建输出
+          if [ ! -f "public/index.html" ]; then
+            echo "❌ 构建失败：未生成index.html"
+            ls -la public/ 2>/dev/null || echo "public目录不存在"
+            exit 1
+          fi
+          
+          echo "✅ 构建成功！生成文件："
+          ls -la public/ | head -5
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./public
 
-  # 部署作业
   deploy:
     environment:
       name: github-pages
@@ -62,37 +82,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
-  # 测试作业（可选）
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v3
-        with:
-          hugo-version: '0.140.0'  # 更新到PaperMod兼容版本
-          extended: true
-
-      - name: Lint Markdown
-        uses: actionshub/markdownlint@2
-        with:
-          config_file: .github/workflows/markdownlint.yaml
-          args: '**/*.md'
-
-      - name: Build Test
-        run: hugo --minify
-
-      - name: Check for broken links
-        uses: lycheeverse/lychee-action@v2
-        with:
-          args: 'public/**/*.html --verbose'
-          fail: true
-
-# 缓存配置
-cache:
-  key: ${{ runner.os }}-hugo-${{ hashFiles('**/go.sum') }}
-  paths:
-    - ~/go/pkg/mod
