@@ -3,18 +3,12 @@ name: Deploy Hugo Site
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  workflow_dispatch:  # 允许手动触发
+  workflow_dispatch:
 
 permissions:
   contents: write
   pages: write
   id-token: write
-
-concurrency:
-  group: "pages-${{ github.ref }}"
-  cancel-in-progress: false
 
 jobs:
   build:
@@ -24,48 +18,21 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: recursive
-          fetch-depth: 0
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
-          hugo-version: '0.140.0'
+          hugo-version: '0.156.0'  # PaperMod要求 >=0.146.0
           extended: true
-
-      # Hugo缓存配置
-      - name: Cache Hugo modules
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/hugo
-            themes
-          key: ${{ runner.os }}-hugo-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-hugo-
 
       - name: Build with Hugo
         env:
           HUGO_ENV: production
         run: |
-          # 清理之前的构建
-          rm -rf public
-          
-          # 构建网站
           hugo \
             --gc \
             --minify \
-            --baseURL "${{ steps.pages.outputs.base_url }}/" \
-            --destination ./public
-          
-          # 验证构建输出
-          if [ ! -f "public/index.html" ]; then
-            echo "❌ 构建失败：未生成index.html"
-            ls -la public/ 2>/dev/null || echo "public目录不存在"
-            exit 1
-          fi
-          
-          echo "✅ 构建成功！生成文件："
-          ls -la public/ | head -5
+            --baseURL "https://cuiyanxiang.github.io/data-karl-lab/"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
