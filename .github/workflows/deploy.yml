@@ -1,4 +1,4 @@
-name: Deploy Hugo Site
+name: Deploy Hugo Site - Ultimate Fix
 
 on:
   push:
@@ -10,29 +10,77 @@ permissions:
   pages: write
   id-token: write
 
+concurrency:
+  group: "pages-${{ github.ref }}"
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout with full history
         uses: actions/checkout@v4
         with:
           submodules: recursive
+          fetch-depth: 0  # 获取完整历史记录
 
-      - name: Setup Hugo
+      - name: Clear any Hugo cache
+        run: |
+          rm -rf ~/.cache/hugo 2>/dev/null || true
+          rm -rf themes 2>/dev/null || true
+          rm -f go.sum 2>/dev/null || true
+          echo "✅ 已清除所有Hugo缓存"
+
+      - name: Setup Hugo (latest extended)
         uses: peaceiris/actions-hugo@v3
         with:
-          hugo-version: '0.156.0'  # PaperMod要求 >=0.146.0
+          hugo-version: '0.156.0'
           extended: true
 
-      - name: Build with Hugo
+      - name: Initialize go module
+        run: |
+          # 确保go.mod存在
+          if [ ! -f "go.mod" ]; then
+            echo "module github.com/CuiYanxiang/data-karl-lab" > go.mod
+            echo "go 1.19" >> go.mod
+          fi
+          
+          # 下载所有依赖
+          hugo mod get -u 2>/dev/null || echo "模块更新跳过"
+          echo "✅ Go模块初始化完成"
+
+      - name: Build with Hugo (verbose)
         env:
           HUGO_ENV: production
         run: |
+          echo "=== 开始构建 ==="
+          echo "当前目录:"
+          pwd
+          ls -la
+          
+          echo "=== 检查主题 ==="
+          ls -la themes/ 2>/dev/null || echo "themes目录不存在"
+          
+          echo "=== 检查配置 ==="
+          grep -n "theme" config.toml
+          
+          echo "=== 构建过程 ==="
+          # 使用详细模式构建
           hugo \
             --gc \
             --minify \
-            --baseURL "https://cuiyanxiang.github.io/data-karl-lab/"
+            --verbose \
+            --baseURL "https://cuiyanxiang.github.io/data-karl-lab/" \
+            --destination ./public
+          
+          echo "=== 构建结果 ==="
+          if [ -f "public/index.html" ]; then
+            echo "✅ 构建成功！生成index.html"
+            ls -la public/ | head -5
+          else
+            echo "❌ 构建失败：未生成index.html"
+            exit 1
+          fi
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
