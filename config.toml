@@ -81,6 +81,34 @@ defaultContentLanguageInSubdir = false
     favicon = "/favicon.ico"
     customCSS = ["/css/custom.css"]
     customJS = ["/js/custom.js"]
+    
+  # 首页配置
+  [params.homeInfoParams]
+    Title = "数据卡尔实验室"
+    Content = """
+    🚀 欢迎来到我的技术博客！
+    
+    我是卡尔，一名大数据架构师和技术创业者。
+    这里分享我在Spark优化、金融数据分析、技术创业等方面的实战经验。
+    
+    💡 关注领域：
+    • Spark/Flink性能优化
+    • 金融科技系统架构
+    • 一人公司创业实践
+    • 开源工具与最佳实践
+    
+    📚 最新文章：
+    • [Spark SQL执行计划深度解析](/posts/spark-sql-execution-plan-deep-dive/)
+    • [数据倾斜的10种解决方案](/posts/data-skew-solutions/)（即将发布）
+    """
+    
+  # 文章列表配置
+  [params.list]
+    showSummary = true
+    showReadingTime = true
+    showDate = true
+    showTags = true
+    showCategories = true
 
 # 菜单配置
 [menu]
