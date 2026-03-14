@@ -69,4 +69,67 @@ hasCJKLanguage = true
 # 安全头
 [security]
   [security.exec]
-    allow = ['^dart-sass-embedded$', '^go$', '^npx$', '^postcss$']
+    allow = ['^dart-sass-embedded$', '^go$', '^npx$', '^postcss$']# 数据卡尔实验室 - 优化配置
+
+# SEO优化配置
+[params.seo]
+  twitter = "@karl_tech"
+  opengraph = true
+  twittercards = true
+
+# 分析工具配置（需要时启用）
+[services.googleAnalytics]
+  id = "UA-XXXXX-X"  # 替换为你的GA ID
+
+# 评论系统配置（可选）
+[params.comments]
+  enabled = true
+  provider = "utterances"
+  
+  [params.comments.utterances]
+    repo = "CuiYanxiang/data-karl-lab"
+    issueTerm = "pathname"
+    theme = "github-light"
+    label = "comment"
+
+# 社交分享配置
+[params.share]
+  enabled = true
+  
+# 代码高亮优化
+[markup.highlight]
+  codeFences = true
+  guessSyntax = true
+  lineNos = true
+  lineNumbersInTable = false
+  noClasses = false
+
+# 数学公式支持
+[params.math]
+  enabled = true
+
+# 阅读进度条
+[params.readingTime]
+  enabled = true
+
+# 文章目录
+[params.toc]
+  enabled = true
+  keepStatic = false
+
+# 自定义CSS优化
+[params.extend]
+  customCSS = ["/css/custom.css"]
+  
+# 邮件订阅（可选）
+[params.subscription]
+  enabled = false
+
+# 搜索优化
+[params.search]
+  enabled = true
+  type = "fuse"
+
+# 图片懒加载
+[params.lazyLoad]
+  enabled = true
