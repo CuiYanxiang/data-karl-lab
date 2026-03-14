@@ -1,0 +1,231 @@
+# 数据卡尔实验室 - Hugo博客配置
+
+baseURL = "https://cuiyanxiang.github.io/data-karl-lab/"
+languageCode = "zh-cn"
+title = "数据卡尔实验室"
+theme = "PaperMod"
+
+# 多语言配置
+defaultContentLanguage = "zh"
+defaultContentLanguageInSubdir = false
+
+[author]
+  name = "卡尔"
+  email = "karl@karl-tech.com"
+  github = "CuiYanxiang"
+  bio = "大数据架构师 | 技术创业者 | Spark优化专家"
+
+# 站点参数
+[params]
+  # 基础信息
+  description = "大数据技术专家卡尔的技术博客 - Spark优化、金融数据分析、一人公司创业实践"
+  keywords = ["Spark", "大数据", "金融科技", "技术创业", "Hugo", "博客"]
+  
+  # 主题模式
+  defaultTheme = "auto"  # auto/dark/light
+  disableThemeToggle = false
+  
+  # 首页配置
+  homeInfoParams = 
+    Title = "数据卡尔实验室"
+    Content = """
+    🚀 欢迎来到我的技术博客！
+    
+    我是卡尔，一名大数据架构师和技术创业者。
+    这里分享我在Spark优化、金融数据分析、技术创业等方面的实战经验。
+    
+    💡 关注领域：
+    • Spark/Flink性能优化
+    • 金融科技系统架构
+    • 一人公司创业实践
+    • 开源工具与最佳实践
+    """
+  
+  # 社交链接
+  socialIcons = [
+    { name = "github", url = "https://github.com/CuiYanxiang" },
+    { name = "twitter", url = "https://twitter.com/karl_tech" },
+    { name = "linkedin", url = "https://linkedin.com/in/karl-tech" },
+    { name = "rss", url = "/index.xml" }
+  ]
+  
+  # 功能开关
+  search = true
+  math = true  # 数学公式支持
+  codeCopy = true  # 代码复制按钮
+  
+  # 评论系统
+  [params.comments]
+    enabled = true
+    provider = "utterances"
+    
+    [params.comments.utterances]
+      repo = "CuiYanxiang/data-karl-lab"
+      issueTerm = "pathname"
+      theme = "github-light"
+      label = "comment"
+  
+  # 分析工具
+  [params.analytics]
+    google = "UA-XXXXX-X"  # Google Analytics ID
+    baidu = "xxxxxxxx"     # 百度统计ID
+    
+  # SEO优化
+  [params.seo]
+    twitter = "@karl_tech"
+    opengraph = true
+    twittercards = true
+    
+  # 扩展功能
+  [params.extend]
+    favicon = "/favicon.ico"
+    customCSS = ["/css/custom.css"]
+    customJS = ["/js/custom.js"]
+
+# 菜单配置
+[menu]
+  [[menu.main]]
+    identifier = "posts"
+    name = "技术文章"
+    url = "/posts/"
+    weight = 1
+    
+  [[menu.main]]
+    identifier = "categories"
+    name = "分类"
+    url = "/categories/"
+    weight = 2
+    
+  [[menu.main]]
+    identifier = "tags"
+    name = "标签"
+    url = "/tags/"
+    weight = 3
+    
+  [[menu.main]]
+    identifier = "about"
+    name = "关于"
+    url = "/about/"
+    weight = 4
+    
+  [[menu.main]]
+    identifier = "archives"
+    name = "归档"
+    url = "/archives/"
+    weight = 5
+    
+  [[menu.main]]
+    identifier = "search"
+    name = "搜索"
+    url = "/search/"
+    weight = 6
+
+# 输出配置
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+  page = ["HTML", "AMP"]
+  
+[outputFormats]
+  [outputFormats.JSON]
+    baseName = "index"
+    mediaType = "application/json"
+    
+# 图像处理
+[imaging]
+  resampleFilter = "CatmullRom"
+  quality = 75
+  anchor = "smart"
+  
+# 税收（分类和标签）
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+  series = "series"
+
+# 分页配置
+[pagination]
+  pagerSize = 5
+  
+# 隐私设置
+[privacy]
+  [privacy.youtube]
+    disabled = false
+    privacyEnhanced = true
+    
+  [privacy.twitter]
+    disabled = false
+    enableDNT = true
+    
+  [privacy.instagram]
+    disabled = false
+    simple = true
+
+# 服务配置
+[services]
+  [services.googleAnalytics]
+    id = "UA-XXXXX-X"
+    
+  [services.disqus]
+    shortname = ""
+    
+  [services.instagram]
+    disableInlineCSS = true
+
+# 安全头
+[security]
+  [security.exec]
+    allow = ['^dart-sass-embedded$', '^go$', '^npx$', '^postcss$']
+    
+  [security.funcs]
+    getenv = ['^HUGO_', '^CI$', '^GITHUB']
+
+# 构建配置
+[build]
+  useResourceCacheWhen = "fallback"
+  writeStats = true
+  
+[build.cachebusters]
+  [build.cachebusters."assets/js/"]
+    source = "assets/**.js"
+    target = "js"
+    
+  [build.cachebusters."assets/css/"]
+    source = "assets/**.css"
+    target = "css"
+
+# 开发服务器配置
+[server]
+  [[server.headers]]
+    for = "/*.js"
+    [server.headers.values]
+      Content-Type = "application/javascript; charset=utf-8"
+      
+  [[server.headers]]
+    for = "/*.css"
+    [server.headers.values]
+      Content-Type = "text/css; charset=utf-8"
+
+# 标记配置
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+      hardWraps = false
+      xhtml = false
+      
+  [markup.highlight]
+    codeFences = true
+    guessSyntax = true
+    lineNos = true
+    lineNumbersInTable = false
+    noClasses = false
+    
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 6
+
+# Sitemap配置
+[sitemap]
+  changefreq = "weekly"
+  filename = "sitemap.xml"
+  priority = 0.5
